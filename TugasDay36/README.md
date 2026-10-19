@@ -1,4 +1,4 @@
-# Tugas Day 35
+# Tugas Day 36
 
 Nama: Ahmad Yazid 
 
