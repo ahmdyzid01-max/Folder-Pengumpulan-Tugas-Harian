@@ -124,3 +124,89 @@ console.log(penghitungA()); // Hasil asli: 4
 // 3. penghitungA terus bertambah karena inner function masih mengingat variabel hitungan
 //    lewat closure. penghitungB mulai dari 1 lagi karena bikin variabel hitungan yang baru.
 
+// =====================================================
+// LANGKAH 2: Perbaiki 8 Kesalahan
+// =====================================================
+
+// Cek stok. Seharusnya tercetak: Stok aman
+// FIX: pesanStok harus dideklarasikan di luar blok
+let pesanStok;
+const stok = 10;
+if (stok > 5) {
+  pesanStok = "Stok aman";
+}
+console.log(pesanStok);
+
+// Potongan 10%. Seharusnya tercetak: 45000
+// FIX: hasil return harus ditangkap ke variabel
+function hitungPotongan(harga) {
+  const potongan = harga * 0.1;
+  return harga - potongan;
+}
+const hasilPotongan = hitungPotongan(50000);
+console.log(hasilPotongan);
+
+// Sambutan. Seharusnya tercetak: Selamat datang di Kedai Senja
+// FIX: ubah jadi function declaration supaya bisa dipanggil sebelum definisi
+console.log(sambutan());
+function sambutan() {
+  return "Selamat datang di Kedai Senja";
+}
+
+// Kota. Seharusnya tercetak: Yogyakarta
+// FIX: console.log harus sesudah deklarasi let
+let kota = "Yogyakarta";
+console.log(kota);
+
+// Total awal 100000. Diskon 90000 hanya dipakai di dalam blok.
+// Seharusnya setelah blok, total tetap: 100000
+// FIX: ganti var jadi let di dalam blok
+var total = 100000;
+if (true) {
+  let total = 90000;
+}
+console.log(total);
+
+// Saldo kas. Seharusnya setelah tambahKas(50000): 150000
+// FIX: hapus let di dalam function karena itu shadowing
+let saldoKas = 100000;
+function tambahKas(jumlah) {
+  saldoKas += jumlah;
+}
+tambahKas(50000);
+console.log(saldoKas);
+
+// Nomor antrean. Seharusnya tercetak: 1 2 3
+// FIX: let nomor harus dipindah ke luar inner function
+function buatAntrean() {
+  let nomor = 0;
+  return function () {
+    nomor++;
+    return nomor;
+  };
+}
+const ambilNomor = buatAntrean();
+console.log(ambilNomor(), ambilNomor(), ambilNomor());
+
+// Dompet. Seharusnya setelah belanja(30000), cekSaldo() mengembalikan: 70000
+// FIX: ganti this.saldo jadi saldo saja
+function buatDompet(saldoAwal) {
+  let saldo = saldoAwal;
+  return {
+    belanja(jumlah) {
+      saldo -= jumlah;
+    },
+    cekSaldo() {
+      return saldo;
+    },
+  };
+}
+const dompet = buatDompet(100000);
+dompet.belanja(30000);
+console.log(dompet.cekSaldo());
+
+// Jawaban Pertanyaan Langkah 2 ada di komentar kode di atas, intinya:
+// - Error di console: pesanStok, kota, sambutan, potongan
+// - Tidak error tapi salah hasil: total, saldoKas, nomor antrean, cekSaldo
+// - let saldoKas = 0 di dalam tambahKas itu shadowing
+// - this.saldo undefined karena saldo bukan property, dia variabel closure
